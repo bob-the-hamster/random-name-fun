@@ -11,6 +11,8 @@ function randomRange(lower, upper) {
 var app = angular.module('randomNameApp', []);
 app.controller('myCtrl', function($scope, $http) {
 
+    $scope.randomCount = 0;
+
     $http({
         url: "names.txt",
         method: 'GET',
@@ -20,6 +22,7 @@ app.controller('myCtrl', function($scope, $http) {
         
         $scope.randomName = function() {
             var name = randomFromArray($scope.namesList);
+            $scope.randomCount += 1;
             return name;
         }
 
@@ -29,14 +32,15 @@ app.controller('myCtrl', function($scope, $http) {
     });
 
     $scope.regenerate = function () {
-        $scope.outputNames = [];
+        var outNames = [];
         for (i = 0; i < 10; i++) {
             var row = [];
             for (j = 0; j < 10 ; j++) {
                 row.push($scope.randomName());
             }
-            $scope.outputNames.push(row);
+            outNames.push(row);
         }
+        $scope.outputNames = outNames;
     }
 
 });
