@@ -11,7 +11,17 @@ function randomRange(lower, upper) {
 var app = angular.module('randomNameApp', []);
 app.controller('myCtrl', function($scope, $http) {
 
-    $scope.randomCount = 0;
+    function resetCounters() {
+        $scope.randomCount = 0;
+        $scope.synthesizeCount = 0;
+    }
+    resetCounters();
+
+    $scope.randomMethodList = [
+        "Synthesize by splicing",
+        "Random from dictionary",
+    ]
+    $scope.randomMethod = $scope.randomMethodList[0];
 
     $http({
         url: "names.txt",
@@ -31,6 +41,7 @@ app.controller('myCtrl', function($scope, $http) {
     });
     
     $scope.synthesizeName = function () {
+        $scope.synthesizeCount += 1;
         let name1 = $scope.randomName();
         for(let i = 0; i < 10; i++) {
             let segmentOffset = randomRange(1, name1.length - 2);
@@ -48,14 +59,24 @@ app.controller('myCtrl', function($scope, $http) {
         // After 1000 attempts, it is time to give up, and just return the first name unmodified
         return name1;
     }
+    
+    function selectedRandomMethodFunction() {
+        if($scope.randomMethod == "Random from dictionary") {
+            return $scope.randomName;
+        }
+        if($scope.randomMethod == "Synthesize by splicing") {
+            return $scope.synthesizeName;
+        }
+    }
 
     $scope.regenerate = function () {
+        resetCounters();
+        let randFn = selectedRandomMethodFunction(); 
         outNames = [];
         for (let i = 0; i < 10; i++) {
             let row = [];
             for (let j = 0; j < 10 ; j++) {
-                //row.push($scope.randomName());
-                row.push($scope.synthesizeName());
+                row.push(randFn());
             }
             outNames.push(row);
         }

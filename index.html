@@ -26,6 +26,8 @@
     <h1>
         Random Name Generator
         <a class="btn btn-lg btn-success" ng-click="regenerate()" role="button">Regenerate</a>
+        <select class="input-sm" ng-model="randomMethod" ng-options="x for x in randomMethodList">
+        </select>
     </h1>
 </div>
 
@@ -33,9 +35,13 @@
   <tr ng-repeat="name in outputNames">
     <td ng-repeat="x in name">{{ x }}</td>
   </tr>
-</table> 
+</table>
 
-<p>randomName() has been called {{ randomCount }} times.</p>
+<p>
+    Dictionary contains {{ namesList.length }} entries.<br>
+    Called randomName() {{ randomCount }} times.<br>
+    Called synthesizeName() {{ synthesizeCount }} times.<br>
+</p>
 
 </div>
 
